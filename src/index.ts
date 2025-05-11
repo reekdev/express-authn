@@ -2,9 +2,11 @@ import express, { Request, Response } from "express";
 import { dbPool } from "./db-pool";
 import { signupHandler } from "./sign-up/sign-up.handler";
 import { signinHandler } from "./sign-in/sign-in.handler";
+import { EnvironmentConfigService } from "./environment/environment-config.service";
+import { ENV } from "./environment";
 
 const app = express();
-const port = process.env?.["PORT"] || 3000;
+const port = ENV.PORT;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -38,3 +40,5 @@ app.use((err: Error, req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
+EnvironmentConfigService.getInstance();

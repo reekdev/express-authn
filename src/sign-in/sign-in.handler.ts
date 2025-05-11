@@ -9,8 +9,11 @@ import { generateAccessToken } from "../utils/generate-access-token";
 export const signinHandler: RequestHandler = async (req, res) => {
   const rawRequestBody = req.body;
   const rawRequestHeaders = req.headers;
-  console.log({ rawRequestBody });
-  console.log({ rawRequestHeaders });
+  // console.log({ rawRequestBody });
+  // console.log({ rawRequestHeaders });
+
+  const nodeEnvironment = process.env?.["NODE_ENV"];
+  console.log({ nodeEnvironment });
 
   const validatedRequestBody = signinRequestBodySchema.parse(rawRequestBody);
 
