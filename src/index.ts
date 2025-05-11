@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import { dbPool } from "./db-pool";
 
 const app = express();
 const port = process.env?.["PORT"] || 3000;
@@ -7,8 +8,11 @@ const port = process.env?.["PORT"] || 3000;
 app.use(express.json());
 
 // Healthcheck endpoint
-app.get("/health", (req: Request, res: Response) => {
-  console.log(req);
+app.get("/health", async (req: Request, res: Response) => {
+  // console.log(req);
+  const client = await dbPool.connect();
+  console.log({ client });
+
   res.status(200).json({ status: "UP", timestamp: new Date().toISOString() });
 });
 
