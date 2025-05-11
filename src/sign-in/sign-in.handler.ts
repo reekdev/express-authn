@@ -4,6 +4,7 @@ import { dbPool } from "../db-pool";
 import { signinRequestBodySchema } from "./sign-in.schema";
 import { findUserByUsername } from "../utils/find-user-by-username";
 import { compare } from "bcryptjs";
+import { generateAccessToken } from "../utils/generate-access-token";
 
 export const signinHandler: RequestHandler = async (req, res) => {
   const rawRequestBody = req.body;
@@ -42,7 +43,13 @@ export const signinHandler: RequestHandler = async (req, res) => {
       res.status(401).json({
         message: "Invalid credentials.",
       });
+      return;
     }
+
+    const { id: userId } = possibleUser;
+
+    const accessToken = generateAccessToken({ userId, username });
+    console.log({ accessToken });
 
     await client.query("commit");
   } catch (error) {
