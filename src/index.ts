@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
 import { dbPool } from "./db-pool";
+import { signupHandler } from "./sign-up/sign-up.handler";
+import { signinHandler } from "./sign-in/sign-in.handler";
 
 const app = express();
 const port = process.env?.["PORT"] || 3000;
@@ -11,10 +13,14 @@ app.use(express.json());
 app.get("/health", async (req: Request, res: Response) => {
   // console.log(req);
   const client = await dbPool.connect();
+
   console.log({ client });
 
   res.status(200).json({ status: "UP", timestamp: new Date().toISOString() });
 });
+
+app.post("/signup", signupHandler);
+app.post("/signin", signinHandler);
 
 // Root endpoint (optional)
 app.get("/", (req: Request, res: Response) => {
