@@ -1,0 +1,57 @@
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig to read more about this file */
+
+    /* Language and Environment */
+    "target": "ES2022", // Or newer, aligns with modern Node.js capabilities
+    "lib": ["ES2022"], // Specifies library files to be included in the compilation
+    "experimentalDecorators": true, // Enables experimental support for ES7 decorators
+    "emitDecoratorMetadata": true, // Enables experimental support for emitting type metadata for decorators
+
+    /* Modules */
+    "module": "NodeNext", // Use Node.js's native ES module support
+    "moduleResolution": "NodeNext", // How modules get resolved (align with "module": "NodeNext")
+    // "baseUrl": "./", // Base directory to resolve non-absolute module names
+    // "paths": {}, // A series of entries which re-map imports to lookup locations relative to the 'baseUrl'
+    "resolveJsonModule": true, // Allows importing .json files
+
+    /* JavaScript Support */
+    // "allowJs": true, // Allow JavaScript files to be a part of your program
+    // "checkJs": true, // Enable error reporting in type-checked JavaScript files
+
+    /* Emit */
+    "declaration": true, // Generate .d.ts files from TypeScript and JavaScript files in your project
+    "declarationMap": true, // Create sourcemaps for d.ts files
+    "sourceMap": true, // Create source map files for emitted JavaScript files
+    "outDir": "./dist", // Specify an output folder for all emitted files
+    // "removeComments": true, // Disable emitting comments
+
+    /* Interop Constraints */
+    "esModuleInterop": true, // Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports
+    "forceConsistentCasingInFileNames": true, // Ensure that casing is correct in imports
+
+    /* Type Checking */
+    "strict": true, // Enable all strict type-checking options
+    "noImplicitAny": true, // Enable error reporting for expressions and declarations with an implied 'any' type
+    "strictNullChecks": true, // When type checking, take into account 'null' and 'undefined'
+    "strictFunctionTypes": true, // When assigning functions, check to ensure parameters and the return values are subtype-compatible
+    "strictBindCallApply": true, // Check that the arguments for 'bind', 'call', and 'apply' methods match the original function
+    "strictPropertyInitialization": true, // Check for class properties that are declared but not set in the constructor
+    "noImplicitThis": true, // Enable error reporting when 'this' is given the type 'any'
+    "useUnknownInCatchVariables": true, // Default catch clause variables as 'unknown' instead of 'any'
+    "alwaysStrict": true, // Ensure 'use strict' is always emitted
+    "noUnusedLocals": true, // Enable error reporting when local variables aren't read
+    "noUnusedParameters": true, // Raise an error when a function parameter isn't read
+    "exactOptionalPropertyTypes": true, // Interpret optional property types as written, rather than adding 'undefined' to the type
+    "noImplicitReturns": true, // Enable error reporting for codepaths that do not explicitly return in a function
+    "noFallthroughCasesInSwitch": true, // Enable error reporting for fallthrough cases in switch statements
+    "noUncheckedIndexedAccess": true, // Add 'undefined' to a type when accessed using an index
+    "noImplicitOverride": true, // Ensure overriding members in derived classes are marked with an override modifier
+    "noPropertyAccessFromIndexSignature": true, // Enforces using indexed accessors for keys declared using an index signature
+
+    /* Completeness */
+    "skipLibCheck": true // Skip type checking .d.ts files
+  },
+  "include": ["src/**/*"], // Specifies which files TypeScript should compile
+  "exclude": ["node_modules", "dist"] // Specifies files to be excluded from compilation
+}
