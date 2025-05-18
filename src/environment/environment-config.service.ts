@@ -2,7 +2,7 @@ import {
   ApplicationEnvironmentVariable,
   environmentSchema,
 } from "./environment.schema";
-import { Environments } from "./environments";
+import { Environment } from "./environments";
 import { resolve } from "node:path";
 import { existsSync } from "node:fs";
 import { config } from "dotenv";
@@ -10,22 +10,22 @@ import { config } from "dotenv";
 export class EnvironmentConfigService {
   private static instance: EnvironmentConfigService;
   public readonly values: ApplicationEnvironmentVariable;
-  private static readonly DEFAULT_ENVIRONMENT: Environments = "development";
+  private static readonly DEFAULT_ENVIRONMENT: Environment = "development";
 
   private constructor() {
-    console.log("inside EnvironmentConfigService:constructor");
+    // console.log("inside EnvironmentConfigService:constructor");
 
-    console.log("\n\nbefore load");
-    console.log("does exist:", process.env?.["RANDOM_DUMMY_DFDFDF_LKLK"]);
+    // console.log("\n\nbefore load");
+    // console.log("does exist:", process.env?.["RANDOM_DUMMY_DFDFDF_LKLK"]);
 
     this.values = this.loadAndValidate();
 
-    console.log("\n\nafter load");
-    console.log("does exist:", process.env?.["RANDOM_DUMMY_DFDFDF_LKLK"]);
+    // console.log("\n\nafter load");
+    // console.log("does exist:", process.env?.["RANDOM_DUMMY_DFDFDF_LKLK"]);
 
-    console.log(process.env?.["PORT"]);
+    // console.log(process.env?.["PORT"]);
 
-    console.log(process.env?.["PORT"]);
+    // console.log(process.env?.["PORT"]);
   }
 
   private loadAndValidate(): ApplicationEnvironmentVariable {
@@ -35,11 +35,11 @@ export class EnvironmentConfigService {
   }
 
   private loadDotEnvFiles(): void {
-    console.log("inside loadDotEnvFiles");
+    // console.log("inside loadDotEnvFiles");
     const currentEnvironment =
       process.env?.["NODE_ENV"] ?? EnvironmentConfigService.DEFAULT_ENVIRONMENT;
 
-    console.log({ currentEnvironment });
+    // console.log({ currentEnvironment });
 
     const baseEnvironmentFileNames = [
       `.env.${currentEnvironment}.local`,
@@ -62,10 +62,10 @@ export class EnvironmentConfigService {
 
       if (existsSync(environmentFilePath)) {
         loadedAtleastOneFile = true;
-        console.log(`${environmentFilePath} exists.`);
+        // console.log(`${environmentFilePath} exists.`);
         config({ path: environmentFilePath, override: true });
       } else {
-        console.log(`${environmentFilePath} does not exist.`);
+        // console.log(`${environmentFilePath} does not exist.`);
       }
     }
 
@@ -86,7 +86,7 @@ export class EnvironmentConfigService {
         "Application cannot start due to invalid configuration. Exiting."
       );
 
-      console.log(error);
+      // console.log(error);
 
       process.exit(1);
     }

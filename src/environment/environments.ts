@@ -1,3 +1,3 @@
 export const environments = ["development", "production"] as const;
 
-export type Environments = (typeof environments)[number];
+export type Environment = (typeof environments)[number];
