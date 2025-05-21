@@ -1,19 +1,21 @@
 services:
   postgres_db: # Name of your service (can be anything, e.g., 'db', 'postgres')
     image: postgres:17 # Specify the official PostgreSQL image and version (e.g., 15, 14, latest)
-    container_name: my_postgres_container # Optional: give a specific name to the container
+    container_name: express-authn-db # Optional: give a specific name to the container
     restart: always # Or 'unless-stopped' - ensures the container restarts if it stops
     environment:
-      POSTGRES_USER: reek # Replace with your desired database username
-      POSTGRES_PASSWORD: root # Replace with your desired database password
+      POSTGRES_USER: admin # Replace with your desired database username
+      POSTGRES_PASSWORD: p4uGGyjHZo9xaLVK2y1WBzCM # Replace with your desired database password
       POSTGRES_DB: express-authn # Replace with your desired database name
       # Optional: Set timezone if needed
       # TZ: "America/New_York"
       # PGDATA: /var/lib/postgresql/data/pgdata # Optional: If you want to specify a different data directory inside the container
     ports:
-      - "5432:5432" # Map port 5432 on your host to port 5432 in the container
+      - "5433:5432" # Map port 5432 on your host to port 5432 in the container
         # Change the host port (left side) if 5432 is already in use on your machine (e.g., "5433:5432")
     # Optional: Healthcheck to ensure the database is ready before other services might depend on it
+    volumes:
+      - ./src/db/db_init:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U your_db_user -d your_app_database"]
       interval: 10s

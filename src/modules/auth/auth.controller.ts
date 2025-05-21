@@ -1,6 +1,9 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
 import { AuthService } from "./auth.service";
-import { signupRequestBodySchema } from "./auth.schema";
+import {
+  signinRequestBodySchema,
+  signupRequestBodySchema,
+} from "./auth.schema";
 
 type AsyncRequestHandler = (
   _req: Request,
@@ -23,18 +26,20 @@ export class AuthController {
 
   public signUp: RequestHandler = this.asyncHander(async (req, res, next) => {
     console.log("Inside new signup");
-    const { username, password } = signupRequestBodySchema.parse(req.body);
-    // throw new Error("HJemlo");
-    await this.authService.signup({ username, password });
+    const { email, password } = signupRequestBodySchema.parse(req.body);
+    await this.authService.signup({ email, password });
     res.status(200).json({
       message: "Inside new signup.",
     });
   });
 
-  public signIn: RequestHandler = (req, res, next) => {
-    console.log("Inside new signin");
-    res.status(200).json({
+  public signIn: RequestHandler = this.asyncHander(async (req, res, next) => {
+    const { email, password } = signinRequestBodySchema.parse(req.body);
+
+    await this.authService.signIn({ email, password });
+
+    return res.status(200).json({
       message: "Inside new signin.",
     });
-  };
+  });
 }

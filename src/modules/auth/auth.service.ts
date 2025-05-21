@@ -1,5 +1,5 @@
 import { hash } from "bcryptjs";
-import type { SignupRequestDto } from "./auth.dto";
+import type { SignInRequestDto, SignupRequestDto } from "./auth.dto";
 import { AuthRepository } from "./auth.repository";
 
 /** This is responsible for only the business logic */
@@ -12,14 +12,23 @@ export class AuthService {
 
   public async signup(params: SignupRequestDto) {
     console.log("AuthService: signup");
-    const { username, password } = params;
-    const doesUsernameExist = await this.authRepository.doesUsernameExist(
-      username
-    );
+    const { email, password } = params;
+    const doesEmailExist = await this.authRepository.doesEmailExist(email);
 
-    if (doesUsernameExist) throw new Error("Username is already taken.");
+    if (doesEmailExist) throw new Error("Email is already taken.");
 
     const hashedPassword = await hash(password, 10);
-    // this.authRepository.createUser()
+    await this.authRepository.createUser({ email, hashedPassword });
+  }
+
+  public async signIn(params: SignInRequestDto) {
+    const { email, password } = params;
+    const doesEmailExist = await this.authRepository.doesEmailExist(email);
+
+    if (!doesEmailExist) throw new Error("Invalid credentials");
+
+    const storedUserDetail = await this.authRepository.findUserByEmail({
+      email,
+    });
   }
 }

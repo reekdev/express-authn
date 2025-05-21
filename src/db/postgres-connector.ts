@@ -9,10 +9,10 @@ export class PostgresConnector {
     if (!PostgresConnector.instance) {
       PostgresConnector.instance = new Pool({
         host: "127.0.0.1",
-        user: "reek",
-        password: "root",
+        user: "auth_user",
+        password: "7XezX5Y0vzKf4CzyM0C857qa",
         database: "express-authn",
-        port: 5432,
+        port: 5433,
       });
       PostgresConnector.instance.on("error", (err, client) => {
         console.error("PostgreSQL Pool: Unexpected error on idle client", err);
@@ -52,3 +52,5 @@ export class PostgresConnector {
     return pool.connect();
   }
 }
+
+

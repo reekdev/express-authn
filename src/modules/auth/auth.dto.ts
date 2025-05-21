@@ -1,16 +1,29 @@
 import z from "zod";
-import { signupRequestBodySchema } from "./auth.schema";
+import {
+  signinRequestBodySchema,
+  signupRequestBodySchema,
+} from "./auth.schema";
 
 /** Controller layer DTO **/
 
 export interface SignupRequestDto {
-  username: z.infer<typeof signupRequestBodySchema>["username"];
+  email: z.infer<typeof signupRequestBodySchema>["email"];
   password: z.infer<typeof signupRequestBodySchema>["password"];
 }
 
 export interface SignupResponseDto {
   id: number;
   username: string;
+}
+
+/** Repository layer DTO */
+export interface UserDetail {
+  id: number;
+}
+
+export interface SignInRequestDto {
+  email: z.infer<typeof signinRequestBodySchema>["email"];
+  password: z.infer<typeof signinRequestBodySchema>["password"];
 }
 
 /** Service layer DTO **/

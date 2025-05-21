@@ -1,11 +1,13 @@
 import { PoolClient } from "pg";
-import { SignupRequestDto } from "./auth.dto";
+import { SignInRequestDto, SignupRequestDto } from "./auth.dto";
 import { PostgresConnector } from "../../db/postgres-connector";
 import z from "zod";
+import { DB_SCHEMA } from "../../shared/constants/db-schema";
+import { findUserByEmailQueryResultRowSchema } from "./auth.schema";
 
 export class AuthRepository {
-  public async doesUsernameExist(
-    username: SignupRequestDto["username"]
+  public async doesEmailExist(
+    email: SignupRequestDto["email"]
   ): Promise<boolean> {
     let client: PoolClient | null = null;
 
@@ -22,11 +24,11 @@ export class AuthRepository {
       const query = `
       select exists (
         select 1
-        from "public"."users" as "u"
-        where "u"."username" = $1
+        from "${DB_SCHEMA}"."users" as "u"
+        where "u"."email" = $1
       );`;
 
-      const values = [username];
+      const values = [email];
 
       const queryResult = await client.query(query, values);
       await client.query("commit");
@@ -49,19 +51,18 @@ export class AuthRepository {
   }
 
   public async createUser(params: {
-    username: SignupRequestDto["username"];
+    email: SignupRequestDto["email"];
     hashedPassword: string;
   }) {
     let client: PoolClient | null = null;
-    const { username, hashedPassword } = params;
-
+    const { email, hashedPassword } = params;
     try {
       client = await PostgresConnector.getClient();
       await client.query("begin");
       const query = `
-      insert into "public"."users"
+      insert into "${DB_SCHEMA}"."users"
       (
-        "username",
+        "email",
         "password_hash"
       )
       values
@@ -70,8 +71,53 @@ export class AuthRepository {
         $2::text
       ) returning "id";`;
 
-      const values = [username, hashedPassword];
+      const values = [email, hashedPassword];
+
+      await client.query(query, values);
       await client.query("commit");
+    } catch (error) {
+      if (client !== null) {
+        try {
+          await client.query("rollback");
+        } catch (error) {}
+      }
+      throw error;
+    } finally {
+      if (client !== null) {
+        client.release();
+      }
+    }
+  }
+
+  public async findUserByEmail(params: { email: SignInRequestDto["email"] }) {
+    let client: PoolClient | null = null;
+    const { email } = params;
+
+    try {
+      client = await PostgresConnector.getClient();
+      await client.query("begin");
+      const query = `
+        select
+          "u"."id",
+          "u"."email",
+          "u"."password_hash"
+        from "${DB_SCHEMA}"."users" as "u"
+        where
+          "u"."email" = $1;
+      `;
+
+      const values = [email];
+
+      const queryResult = await client.query(query, values);
+      await client.query("commit");
+
+      if (queryResult.rows.length !== 1) throw new Error("User not found.");
+
+      const parsedRow = findUserByEmailQueryResultRowSchema.parse(
+        queryResult.rows[0]
+      );
+
+      return parsedRow;
     } catch (error) {
       if (client !== null) {
         try {
